@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Database Service
+  mongo:
+    image: mongo:latest
+    container_name: fitagg_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - fitagg_network
+
+  # Backend Express Server
+  backend:
+    build: ./backend
+    container_name: fitagg_backend
+    ports:
+      - "5050:5050"
+    environment:
+      - PORT=5050
+      - MONGODB_URI=mongodb://mongo:27017/fitness_aggregator_db
+      - JWT_SECRET=super_secret_fitness_key_987654
+    depends_on:
+      - mongo
+    networks:
+      - fitagg_network
+
+  # Frontend React Web app served by Nginx
+  frontend:
+    build: ./frontend
+    container_name: fitagg_frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - fitagg_network
+
+volumes:
+  mongo_data:
+
+networks:
+  fitagg_network:
+    driver: bridge
