@@ -405,7 +405,18 @@ export const GymDetail: React.FC = () => {
                     <div className="absolute bottom-0 left-0 w-8 h-8 bg-black border-2 border-white"></div>
                   </div>
 
-                  <p className="mt-2 text-[9px] font-mono text-black font-semibold truncate max-w-[150px]">{qrToken.slice(0, 24)}...</p>
+                  <div className="mt-2 flex items-center gap-1.5 bg-black/5 px-2 py-1 rounded border border-black/10">
+                    <span className="text-[8px] font-mono text-gray-700 select-all truncate max-w-[100px]">{qrToken}</span>
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(qrToken);
+                        alert('Token copied to clipboard! Paste it directly into the simulator.');
+                      }}
+                      className="text-[8px] bg-black/10 hover:bg-black/25 text-black font-extrabold px-1.5 py-0.5 rounded transition-all cursor-pointer"
+                    >
+                      Copy
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
